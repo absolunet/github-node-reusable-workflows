@@ -24,8 +24,7 @@ jobs:
           path: ./checkout-directory
       - name: Setup Node ${{ inputs.node_version }}
         uses: actions/setup-node@v3
-        working-directory: ./checkout-directory
         with:
           node-version: ${{ inputs.node_version }}
           cache: "npm"
-          cache-dependency-path: ./package-lock.json
+          cache-dependency-path: ./checkout-directory/package-lock.json
