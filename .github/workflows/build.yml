@@ -11,6 +11,7 @@ jobs:
       - name: "TEST Reusable workflows - build.yml "
         shell: bash
         run: | 
-          echo "PRINTT Reusable workflows - build.yml ${{ env.NODE_BUILD_VERSION }}"
+          echo "PRINT Reusable workflows - build.yml ${{ env.NODE_BUILD_VERSION }}"
           ls -ltr ../
+          echo $GITHUB_WORKSPACE
 
