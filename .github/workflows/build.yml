@@ -1,0 +1,8 @@
+on:
+  workflow_call:
+
+jobs:
+  call_workflow_setup:
+    name: Calling reusable workflow setup
+    uses: ./.github/workflows/setup.yml
+    runs-on: ubuntu-latest

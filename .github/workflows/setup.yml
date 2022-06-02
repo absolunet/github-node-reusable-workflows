@@ -1,0 +1,23 @@
+on:
+  workflow_call:
+    inputs:
+      node_version:
+        required: true
+        type: string
+      os:
+        required: true
+        type: string
+
+jobs:
+  setup:
+    name: Setup node
+    runs-on: ubuntu-latest
+    steps:
+      - name: TEST Reusable workflows - setup.yml 
+        shell: bash
+        run: echo "PRINT Reusable workflows - setup.yml"
+      # - name: Checkout repository
+      #   uses: actions/checkout@v3
+      #   with:
+      #     ref: ${{ github.head_ref }}
+      #     path: ${{ env.CHECKOUT_WORKSPACE }}
