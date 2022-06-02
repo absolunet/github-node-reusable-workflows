@@ -1,0 +1,52 @@
+name: Node Manager reusable workflows - Version bump
+
+on:
+  workflow_call:
+
+jobs:
+  version_change:
+    name: Bump version [github-node-reusable-workflows/version_bump]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Fetch checkout-repository-cache
+        uses: actions/cache@v3
+        id: checkout-repository-cache
+        with:
+          path: ./*
+          key: checkout-repository-cache-${{ github.sha }}
+
+      - name: Parse incrementor from branch name
+        id: get-npm-config-release
+        shell: bash
+        run: |
+          REF_BRANCH=${{ github.head_ref }}
+          echo "::set-output name=branch_suffix::$(echo ${REF_BRANCH##*/})"
+
+      - name: Bump version to ${{ steps.get-npm-config-release.outputs.branch_suffix }} via 'ci:version' npm script
+        shell: bash
+        run: npm run ci:version --release=${{ steps.get-npm-config-release.outputs.branch_suffix }}
+
+      - name: Get new version
+        id: get-package-info
+        shell: bash
+        run: echo "::set-output name=package_version::$(npm pkg get version)"
+
+      - uses: absolunet/github-update-changelog-action@main
+        with:
+          release-version: ${{ steps.get-package-info.outputs.package_version }}
+
+      - name: Configure git
+        shell: bash
+        run: |
+          git config --global core.autocrlf false
+          git config --global user.name "$(git --no-pager log --format=format:'%an' -n 1)"
+          git config --global user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
+
+      - name: Commit changes
+        shell: bash
+        run: |
+          git status
+          git add -u
+          git commit -m "[GitHub Action] Version bump to ${{ steps.get-package-info.outputs.package_version }}"
+          git push origin ${{ github.head_ref }}
