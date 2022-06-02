@@ -21,16 +21,15 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
-          path: ./checkout-directory
       - name: Setup Node ${{ inputs.node_version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.node_version }}
           cache: "npm"
-          cache-dependency-path: ./checkout-directory/package-lock.json
-      - name: TEST
-        run: |
-          pwd
-          ls -ltr
-          echo "GITHUB WORKSPACE"
-          ls -ltr $GITHUB_WORKSPACE/checkout-directory
+          cache-dependency-path: ./package-lock.json
+      - name: Create Cache
+        uses: actions/cache@v3
+        id: checkout-repository-cache
+        with:
+          path: ./*
+          key: checkout-repository-cache-${{ github.sha }}

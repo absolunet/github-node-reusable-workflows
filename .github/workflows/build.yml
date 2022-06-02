@@ -8,11 +8,18 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
+      - name: Use build-cache
+        uses: actions/cache@v3
+        id: checkout-repository-cache
+        with:
+          path: ./*
+          key: checkout-repository-cache-${{ github.sha }}
       - name: "TEST Reusable workflows - build.yml "
         shell: bash
         run: | 
           echo "PRINT Reusable workflows - build.yml ${{ env.NODE_BUILD_VERSION }}"
-          ls -ltr ../
+          pwd
+          ls -ltr 
           echo $GITHUB_WORKSPACE
           ls -ltr $GITHUB_WORKSPACE
 
