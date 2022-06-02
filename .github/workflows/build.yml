@@ -14,7 +14,10 @@ jobs:
   #   uses: ./.github/workflows/setup.yml
   #   runs-on: ubuntu-latest
   build:
-    - name: Build
-    shell: bash
-    run: echo "BUILD on reusable workflow"
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      -name: Build on reusable workflow
+      shell: bash
+      run: echo "TEST reusable workflow"
 
