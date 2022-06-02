@@ -12,5 +12,5 @@ jobs:
         shell: bash
         run: | 
           echo "PRINT Reusable workflows - build.yml ${{ env.NODE_BUILD_VERSION }}"
-          ls -ltr
+          ls -ltr ../
 
