@@ -1,2 +1,11 @@
 on:
   workflow_call:
+
+jobs:
+  setup:
+    name: Running Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: TEST Reusable workflows - test.yml 
+        shell: bash
+        run: echo "PRINT Reusable workflows - test.yml"
