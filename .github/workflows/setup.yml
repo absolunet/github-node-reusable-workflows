@@ -4,22 +4,26 @@ on:
   workflow_call:
     inputs:
       node_version:
-        required: true
+        required: false
         type: string
+        default: 16
       os:
-        required: true
+        required: false
         type: string
+        default: ubuntu-latest
 
 jobs:
   setup:
-    name: Setup node
-    runs-on: ubuntu-latest
+    name: Setup node version ${{ inputs.node-version }}
+    runs-on: ${{ inputs.os }}
     steps:
-      - name: TEST Reusable workflows - setup.yml 
-        shell: bash
-        run: echo "PRINT Reusable workflows - setup.yml"
-      # - name: Checkout repository
-      #   uses: actions/checkout@v3
-      #   with:
-      #     ref: ${{ github.head_ref }}
-      #     path: ${{ env.CHECKOUT_WORKSPACE }}
+      - name: Checkout repository ${{ github.head_ref }}
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+      - name: Setup Node ${{ inputs.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: "npm"
+          cache-dependency-path: ./package-lock.json

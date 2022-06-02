@@ -8,7 +8,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: "Build on reusable workflow"
+      - name: "TEST Reusable workflows - build.yml "
         shell: bash
-        run: echo "TEST reusable workflow"
+        run: echo "PRINT Reusable workflows - build.yml ${{ env.NODE_BUILD_VERSION }}"
 
