@@ -2,6 +2,16 @@ name: Reusable workflow - Test
 
 on:
   workflow_call:
+    # inputs:
+    #   node-version:
+    #     required: false
+    #     type: string
+    #     default: >-
+#        ["16", "14"]
+    #   os:
+    #     required: false
+    #     type: string
+    #     default: ubuntu-latest
 
 jobs:
   test:
@@ -10,6 +20,7 @@ jobs:
         node-version: [16, 14]
         os: [ubuntu-latest]
         # node-version: ${{fromJson(inputs.node-version)}}
+        # os: ${{fromJson(inputs.os)}}
 
     name: Running Test with node ${{ matrix.node-version }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}

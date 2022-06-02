@@ -14,7 +14,7 @@ on:
 
 jobs:
   setup:
-    name: Setup node version ${{ inputs.node-version }}
+    name: Setup with Node version ${{ inputs.node-version }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository ${{ github.head_ref }}
