@@ -1,11 +1,6 @@
 name: Reusable workflow - Setup
 
 on:
-  push:
-    branches:
-      - release/**
-      - develop
-      - feature/**
   workflow_call:
     inputs:
       node_version:

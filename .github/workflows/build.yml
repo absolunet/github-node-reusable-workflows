@@ -1,19 +1,9 @@
 name: Reusable workflow - Build
 
 on:
-  push:
-    branches:
-      - release/**
-      - develop
-      - feature/**
   workflow_call:
 
-
 jobs:
-  # call_workflow_setup:
-  #   name: Calling reusable workflow setup
-  #   uses: ./.github/workflows/setup.yml
-  #   runs-on: ubuntu-latest
   build:
     name: Build
     runs-on: ubuntu-latest

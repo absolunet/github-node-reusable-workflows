@@ -1,3 +1,5 @@
+name: Reusable workflow - Test
+
 on:
   workflow_call:
 
