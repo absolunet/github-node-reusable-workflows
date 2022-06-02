@@ -1,4 +1,11 @@
+name: Reusable workflow - Build
+
 on:
+  push:
+    branches:
+      - release/**
+      - develop
+      - feature/**
   workflow_call:
 
 jobs:
