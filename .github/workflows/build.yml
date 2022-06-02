@@ -8,12 +8,28 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: Use build-cache
+      - name: Use checkout-repository-cache
         uses: actions/cache@v3
         id: checkout-repository-cache
         with:
           path: ./*
           key: checkout-repository-cache-${{ github.sha }}
+      
+      - name: Build project
+        shell: bash
+        run: npm run manager:build
+      
+      - name: Clean node_modules directory
+        shell: bash
+        run: rm -fr node_modules
+      
+      - name: Create build-cache
+        uses: actions/cache@v3
+        id: build-cache
+        with:
+          path: ./*
+          key: build-cache-${{ github.sha }}
+      
       - name: "TEST Reusable workflows - build.yml "
         shell: bash
         run: | 

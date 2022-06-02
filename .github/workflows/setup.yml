@@ -3,7 +3,7 @@ name: Reusable workflow - Setup
 on:
   workflow_call:
     inputs:
-      node_version:
+      node-version:
         required: false
         type: string
         default: 16
@@ -14,19 +14,24 @@ on:
 
 jobs:
   setup:
-    name: Setup node version ${{ inputs.node_version }}
+    name: Setup node version ${{ inputs.node-version }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository ${{ github.head_ref }}
         uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
-      - name: Setup Node ${{ inputs.node_version }}
+      
+      - name: Setup Node ${{ inputs.node-version }}
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ inputs.node_version }}
+          node-version: ${{ inputs.node-version }}
           cache: "npm"
           cache-dependency-path: ./package-lock.json
+      
+      - name: Install dependencies
+        run: npm ci
+      
       - name: Create Cache
         uses: actions/cache@v3
         id: checkout-repository-cache
