@@ -8,6 +8,7 @@ on:
       - feature/**
   workflow_call:
 
+
 jobs:
   # call_workflow_setup:
   #   name: Calling reusable workflow setup
@@ -18,5 +19,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Build on reusable workflow"
-      run: echo "TEST reusable workflow"
+        run: echo "TEST reusable workflow"
 
