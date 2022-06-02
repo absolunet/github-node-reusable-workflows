@@ -19,5 +19,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Build on reusable workflow"
+        shell: bash
         run: echo "TEST reusable workflow"
 
