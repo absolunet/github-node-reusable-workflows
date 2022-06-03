@@ -34,6 +34,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
+          always-auth: true
           node-version: ${{ matrix.node-version }}
           cache: "npm"
           cache-dependency-path: ./package-lock.json
