@@ -3,6 +3,10 @@ name: Reusable workflow - Version Bump
 on:
   workflow_call:
 
+env:
+  GIT_USERNAME: 'absobot'
+  GIT_EMAIL: 'absobot@absolunet.com'
+
 jobs:
   version_change:
     name: Version change
@@ -36,6 +40,13 @@ jobs:
         with:
           release-version: ${{ steps.get-package-info.outputs.package_version }}
       
+      - name: Prepare git
+        shell: bash
+        run: |
+          git config --global core.autocrlf false
+          git config --global user.name $GIT_USERNAME
+          git config --global user.email $GIT_EMAIL
+
       - name: Commit Change
         shell: bash
         run: |

@@ -7,6 +7,10 @@ on:
         required: true
         type: string
 
+env:
+  GIT_USERNAME: 'absobot'
+  GIT_EMAIL: 'absobot@absolunet.com'
+
 jobs:
   publish:
     name: Publish and Tag
@@ -27,6 +31,13 @@ jobs:
           if [[ $(npm pkg get version) == *"-"* ]]; then OPTS+=('--tag=next') ; fi
           if [[ $(npm pkg get workspaces) != "{}" ]]; then OPTS+=('--workspaces') ; fi
           npm publish $OPTS --access=public
+
+      - name: Prepare git
+        shell: bash
+        run: |
+          git config --global core.autocrlf false
+          git config --global user.name $GIT_USERNAME
+          git config --global user.email $GIT_EMAIL
 
       - name: Git Tag
         shell: bash
