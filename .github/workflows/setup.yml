@@ -35,6 +35,13 @@ jobs:
           ref: ${{ inputs.branch-ref }}
           token: ${{ secrets.GLOBAL_ACCESS_TOKEN }}
       
+      - name: PRINT INPUTS
+        run: |
+          echo ${{ inputs.branch-ref }}
+          echo ${{ inputs.node-auth-token }}
+          echo ${{ inputs.node-registry-url }}
+          echo ${{ inputs.node-scope }}
+
       - name: Setup Node ${{ inputs.node-version }}
         uses: actions/setup-node@v3
         with:
