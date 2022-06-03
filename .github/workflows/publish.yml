@@ -3,7 +3,7 @@ name: Reusable workflow - Publish
 on:
   workflow_call:
     inputs:
-      private-registry:
+      npm-registry:
         required: false
         type: string
         default: public
@@ -22,7 +22,7 @@ jobs:
           key: build-cache-${{ github.sha }}
 
       - name: Setup Node ${{ inputs.node-version }} for Private NPM
-        if:  ${{ inputs.private-registry == 'private' }}
+        if:  ${{ inputs.npm-registry == 'private' }}
         uses: actions/setup-node@v3
         with:
           always-auth: true
@@ -35,7 +35,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}
       
       - name: Setup Node ${{ inputs.node-version }} for Public NPM
-        if:  ${{ inputs.private-registry == 'public' }}
+        if:  ${{ inputs.npm-registry == 'public' }}
         uses: actions/setup-node@v3
         with:
           always-auth: true
