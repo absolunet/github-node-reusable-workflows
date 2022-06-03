@@ -74,6 +74,6 @@ jobs:
       - name: Git Tag
         shell: bash
         run: |
-          TAG_VERSION=$(npm pkg get version)
-          git tag ${TAG_VERSION}
-          git push origin ${TAG_VERSION}
+          TAG_VERSION=$(npm pkg get version | xargs)
+          git tag $TAG_VERSION
+          git push origin $TAG_VERSION
