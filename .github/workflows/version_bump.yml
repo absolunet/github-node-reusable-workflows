@@ -23,9 +23,12 @@ jobs:
         run: |
           REF_BRANCH=${{ github.head_ref }}
           echo "::set-output name=branch_suffix::$(echo ${REF_BRANCH##*/})"
+
+      - name: DEBUG
+        run: |
           pwd
           ls -ltr
-      
+
       - name: Create a release version bump
         shell: bash
         run: npm run manager:version --release=${{ steps.get-npm-config-release.outputs.branch_suffix }}
