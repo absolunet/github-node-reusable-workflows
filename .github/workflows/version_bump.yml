@@ -23,6 +23,8 @@ jobs:
         run: |
           REF_BRANCH=${{ github.head_ref }}
           echo "::set-output name=branch_suffix::$(echo ${REF_BRANCH##*/})"
+          pwd
+          ls -ltr
       
       - name: Create a release version bump
         shell: bash
