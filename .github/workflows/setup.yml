@@ -41,6 +41,7 @@ jobs:
           echo ${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}
           echo ${{ inputs.node-registry-url }}
           echo ${{ inputs.node-scope }}
+          echo ${{ inputs.node-auth-token }}
 
       - name: Setup Node ${{ inputs.node-version }}
         uses: actions/setup-node@v3
