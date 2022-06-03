@@ -34,7 +34,7 @@ jobs:
           token: ${{ secrets.GLOBAL_ACCESS_TOKEN }}
       
       - name: Setup Node ${{ inputs.node-version }} for Private NPM
-        if:  ${{ inputs.private-registry == 'true' }}
+        if:  ${{ inputs.private-registry }}
         uses: actions/setup-node@v3
         with:
           always-auth: true
@@ -47,7 +47,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}
       
       - name: Setup Node ${{ inputs.node-version }} for Public NPM
-        if:  ${{ inputs.private-registry == 'false' }}
+        if:  ${{ ! inputs.private-registry }}
         uses: actions/setup-node@v3
         with:
           always-auth: true
