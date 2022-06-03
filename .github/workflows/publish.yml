@@ -28,7 +28,6 @@ jobs:
           REGISTRY_NAMESPACE=${{ secrets.NPMRC_JFROG_ARTIFACTORY_NAMESPACE }}
           echo "${REGISTRY_NAMESPACE}:registry=${REGISTRY}" >> .npmrc
           echo "//${REGISTRY##*//}:always-auth=true" >> .npmrc
-          echo "//${REGISTRY##*//}:email=absobot@absolunet.com" >> .npmrc
           echo "//${REGISTRY##*//}:_auth=${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}" >> .npmrc
           
       # - name: Setup Node ${{ inputs.node-version }} for Private NPM
