@@ -24,6 +24,9 @@ jobs:
     name: Setup with Node version ${{ inputs.node-version }}
     runs-on: ${{ inputs.os }}
     steps:
+      - name: DEBUG
+        run: echo ${{ inputs.private-registry }}
+
       - name: Checkout repository ${{ inputs.branch-ref }}
         uses: actions/checkout@v3
         with:
