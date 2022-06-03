@@ -14,10 +14,10 @@ on:
         required: false
         type: string
         default: ubuntu-latest
-      private-registry:
+      npm-registry:
         required: false
-        type: boolean
-        default: false
+        type: string
+        default: public
 
 jobs:
   setup:
@@ -34,7 +34,7 @@ jobs:
           token: ${{ secrets.GLOBAL_ACCESS_TOKEN }}
       
       - name: Setup Node ${{ inputs.node-version }} for Private NPM
-        if:  ${{ inputs.private-registry }}
+        if:  ${{ inputs.npm-registry == 'private' }}
         uses: actions/setup-node@v3
         with:
           always-auth: true
@@ -47,7 +47,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}
       
       - name: Setup Node ${{ inputs.node-version }} for Public NPM
-        if:  ${{ ! inputs.private-registry }}
+        if:  ${{ inputs.private-registry == 'public' }}
         uses: actions/setup-node@v3
         with:
           always-auth: true
