@@ -14,15 +14,10 @@ on:
         required: false
         type: string
         default: ubuntu-latest
-      node-auth-token:
+      private-registry:
         required: false
-        type: string
-      node-registry-url:
-        required: false
-        type: string
-      node-scope:
-        required: false
-        type: string
+        type: boolean
+        default: false
 
 jobs:
   setup:
@@ -35,25 +30,29 @@ jobs:
           ref: ${{ inputs.branch-ref }}
           token: ${{ secrets.GLOBAL_ACCESS_TOKEN }}
       
-      - name: PRINT INPUTS
-        run: |
-          echo ${{ inputs.branch-ref }}
-          echo ${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}
-          echo ${{ inputs.node-registry-url }}
-          echo ${{ inputs.node-scope }}
-          echo ${{ inputs.node-auth-token }}
-
-      - name: Setup Node ${{ inputs.node-version }}
+      - name: Setup Node ${{ inputs.node-version }} for Private NPM
+        if:  ${{ inputs.private-registry == 'true' }}
         uses: actions/setup-node@v3
         with:
           always-auth: true
           node-version: ${{ inputs.node-version }}
           cache: "npm"
           cache-dependency-path: ./package-lock.json
-          scope: ${{ inputs.node-scope }}
-          registry-url: ${{ inputs.node-registry-url }}
+          scope: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_NAMESPACE }}
+          registry-url: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_URL }}
         env:
-          NODE_AUTH_TOKEN: ${{ inputs.node-auth-token }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}
+      
+      - name: Setup Node ${{ inputs.node-version }} for Public NPM
+        if:  ${{ inputs.private-registry == 'false' }}
+        uses: actions/setup-node@v3
+        with:
+          always-auth: true
+          node-version: ${{ inputs.node-version }}
+          cache: "npm"
+          cache-dependency-path: ./package-lock.json
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPMRC_NPMJS_REGISTRY_TOKEN }}
       
       - name: Install dependencies
         run: npm ci
