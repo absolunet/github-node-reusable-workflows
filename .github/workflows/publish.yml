@@ -2,6 +2,11 @@ name: Reusable workflow - Publish
 
 on:
   workflow_call:
+    inputs:
+      private-registry:
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   publish:
