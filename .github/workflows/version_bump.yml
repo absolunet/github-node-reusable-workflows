@@ -1,0 +1,38 @@
+name: Reusable workflow - Version Bump
+
+on:
+  workflow_call:
+
+jobs:
+  version_change:
+    name: Version change
+    if: startsWith(github.head_ref, 'release')
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Use build-cache
+        uses: actions/cache@v3
+        id: build-cache
+        with:
+          path: ./*
+          key: build-cache-${{ github.sha }}
+      
+      - name: Get npm-config-release
+        id: get-npm-config-release
+        shell: bash
+        run: |
+          REF_BRANCH=${{ github.head_ref }}
+          echo "::set-output name=branch_suffix::$(echo ${REF_BRANCH##*/})"
+      
+      - name: Create a release version bump
+        shell: bash
+        run: npm run manager:version --release=${{ steps.get-npm-config-release.outputs.branch_suffix }}
+      
+      - name: Get Package Version
+        id: get-package-info
+        shell: bash
+        run: echo "::set-output name=package_version::$(npm pkg get version)"
+      
+      - uses: absolunet/github-update-changelog-action@main
+        with:
+          release-version: ${{ steps.get-package-info.outputs.package_version }}
