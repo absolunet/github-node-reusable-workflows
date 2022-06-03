@@ -43,7 +43,7 @@ jobs:
           cache-dependency-path: ./package-lock.json
           scope: ${{ secrets.NODE_SCOPE }}
           registry-url: ${{ secrets.NODE_REGISTRY_URL }}
-         env:
+        env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
       
       - name: Install dependencies
