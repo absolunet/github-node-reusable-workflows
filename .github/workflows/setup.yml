@@ -17,7 +17,7 @@ on:
       npm-registry:
         required: false
         type: string
-        default: 'public'
+        default: public
 
 jobs:
   setup:

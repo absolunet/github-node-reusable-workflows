@@ -25,12 +25,12 @@ jobs:
         if:  ${{ inputs.npm-registry == 'private' }}
         uses: actions/setup-node@v3
         with:
-          always-auth: true
           node-version: ${{ inputs.node-version }}
           cache: "npm"
           cache-dependency-path: ./package-lock.json
           scope: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_NAMESPACE }}
           registry-url: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_URL }}
+          token: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}
       
@@ -42,6 +42,7 @@ jobs:
           node-version: ${{ inputs.node-version }}
           cache: "npm"
           cache-dependency-path: ./package-lock.json
+          token: ${{ secrets.NPMRC_NPMJS_REGISTRY_TOKEN }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPMRC_NPMJS_REGISTRY_TOKEN }}
 
