@@ -19,7 +19,6 @@ jobs:
         shell: bash
         run: npm run manager:build
       
-      # Doit on supprimer ICI ??? Ca ne serait pas mieux de le faire lors des tests ?
       - name: Clean node_modules directory
         shell: bash
         run: rm -fr node_modules
@@ -30,13 +29,4 @@ jobs:
         with:
           path: ./*
           key: build-cache-${{ github.sha }}
-      
-      - name: "TEST Reusable workflows - build.yml "
-        shell: bash
-        run: | 
-          echo "PRINT Reusable workflows - build.yml ${{ env.NODE_BUILD_VERSION }}"
-          pwd
-          ls -ltr 
-          echo $GITHUB_WORKSPACE
-          ls -ltr $GITHUB_WORKSPACE
-
+          

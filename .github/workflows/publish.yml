@@ -1,0 +1,36 @@
+name: Reusable workflow - Publish
+
+on:
+  workflow_call:
+    inputs:
+      branch-ref:
+        required: true
+        type: string
+
+jobs:
+  publish:
+    name: Publish and Tag
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Use build-cache
+        uses: actions/cache@v3
+        id: build-cache
+        with:
+          path: ./*
+          key: build-cache-${{ github.sha }}
+
+      - name: NPM publish
+        shell: bash
+        run: |
+          OPTS=();
+          if [[ $(npm pkg get version) == *"-"* ]]; then OPTS+=('--tag=next') ; fi
+          if [[ $(npm pkg get workspaces) != "{}" ]]; then OPTS+=('--workspaces') ; fi
+          npm publish $OPTS --access=public
+
+      - name: Git Tag
+        shell: bash
+        run: |
+          TAG_VERSION=$(npm pkg get version)
+          git tag ${TAG_VERSION}
+          git push origin ${TAG_VERSION}

@@ -3,6 +3,9 @@ name: Reusable workflow - Setup
 on:
   workflow_call:
     inputs:
+      branch-ref:
+        required: true
+        type: string
       node-version:
         required: false
         type: string
@@ -11,16 +14,26 @@ on:
         required: false
         type: string
         default: ubuntu-latest
+    secrets:
+      NODE_AUTH_TOKEN:
+        required: false
+        type: string
+      NODE_REGISTRY_URL:
+        required: false
+        type: string
+      NODE_SCOPE:
+        required: false
+        type: string
 
 jobs:
   setup:
     name: Setup with Node version ${{ inputs.node-version }}
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.os }}
     steps:
-      - name: Checkout repository ${{ github.head_ref }}
+      - name: Checkout repository ${{ inputs.branch-ref }}
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.head_ref }}
+          ref: ${{ inputs.branch-ref }}
       
       - name: Setup Node ${{ inputs.node-version }}
         uses: actions/setup-node@v3
@@ -28,6 +41,10 @@ jobs:
           node-version: ${{ inputs.node-version }}
           cache: "npm"
           cache-dependency-path: ./package-lock.json
+          scope: ${{ secrets.NODE_SCOPE }}
+          registry-url: ${{ secrets.NODE_REGISTRY_URL }}
+         env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
       
       - name: Install dependencies
         run: npm ci

@@ -6,16 +6,15 @@ on:
 jobs:
   version_change:
     name: Version change
-    if: startsWith(github.head_ref, 'release')
     runs-on: ubuntu-latest
     
     steps:
-      - name: Use build-cache
+      - name: Use checkout-repository-cache
         uses: actions/cache@v3
-        id: build-cache
+        id: checkout-repository-cache
         with:
           path: ./*
-          key: build-cache-${{ github.sha }}
+          key: checkout-repository-cache-${{ github.sha }}
       
       - name: Get npm-config-release
         id: get-npm-config-release
@@ -23,10 +22,6 @@ jobs:
         run: |
           REF_BRANCH=${{ github.head_ref }}
           echo "::set-output name=branch_suffix::$(echo ${REF_BRANCH##*/})"
-      
-      # A verifier
-      - name: Install dependencies
-        run: npm ci
 
       - name: Create a release version bump - ${{ steps.get-npm-config-release.outputs.branch_suffix }}
         shell: bash
@@ -40,3 +35,11 @@ jobs:
       - uses: absolunet/github-update-changelog-action@main
         with:
           release-version: ${{ steps.get-package-info.outputs.package_version }}
+      
+      - name: Commit Change
+        shell: bash
+        run: |
+          git status
+          git add -u
+          git commit -m "Automated Version bump - ${{ steps.get-package-info.outputs.package_version }}"
+          git push origin ${{ github.head_ref }}

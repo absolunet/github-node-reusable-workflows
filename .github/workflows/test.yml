@@ -2,16 +2,16 @@ name: Reusable workflow - Test
 
 on:
   workflow_call:
-    # inputs:
-    #   node-version:
-    #     required: false
-    #     type: string
-    #     default: >-
-#        ["16", "14"]
-    #   os:
-    #     required: false
-    #     type: string
-    #     default: ubuntu-latest
+    secrets:
+      NODE_AUTH_TOKEN:
+        required: false
+        type: string
+      NODE_REGISTRY_URL:
+        required: false
+        type: string
+      NODE_SCOPE:
+        required: false
+        type: string
 
 jobs:
   test:
@@ -19,8 +19,6 @@ jobs:
       matrix:
         node-version: [16, 14]
         os: [ubuntu-latest]
-        # node-version: ${{fromJson(inputs.node-version)}}
-        # os: ${{fromJson(inputs.os)}}
 
     name: Running Test with node ${{ matrix.node-version }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -33,6 +31,17 @@ jobs:
           path: ./*
           key: build-cache-${{ github.sha }}
       
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: ./package-lock.json
+          scope: ${{ secrets.NODE_SCOPE }}
+          registry-url: ${{ secrets.NODE_REGISTRY_URL }}
+         env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+
       - name: Install dependencies
         run: npm ci
       
