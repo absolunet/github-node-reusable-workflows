@@ -21,39 +21,39 @@ jobs:
           path: ./*
           key: build-cache-${{ github.sha }}
 
-      - name: Generate NPMRC for JFROG Artifactory
-        shell: bash
-        run: |
-          REGISTRY=${{ secrets.NPMRC_JFROG_ARTIFACTORY_URL }}
-          REGISTRY_NAMESPACE=${{ secrets.NPMRC_JFROG_ARTIFACTORY_NAMESPACE }}
-          echo "${REGISTRY_NAMESPACE}:registry=${REGISTRY}" >> .npmrc
-          echo "//${REGISTRY##*//}:always-auth=true" >> .npmrc
-          echo "//${REGISTRY##*//}:_auth=${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}" >> .npmrc
+      # - name: Generate NPMRC for JFROG Artifactory
+      #   shell: bash
+      #   run: |
+      #     REGISTRY=${{ secrets.NPMRC_JFROG_ARTIFACTORY_URL }}
+      #     REGISTRY_NAMESPACE=${{ secrets.NPMRC_JFROG_ARTIFACTORY_NAMESPACE }}
+      #     echo "${REGISTRY_NAMESPACE}:registry=${REGISTRY}" >> .npmrc
+      #     echo "//${REGISTRY##*//}:always-auth=true" >> .npmrc
+      #     echo "//${REGISTRY##*//}:_auth=${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}" >> .npmrc
           
-      # - name: Setup Node ${{ inputs.node-version }} for Private NPM
-      #   if:  ${{ inputs.npm-registry == 'private' }}
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     node-version: ${{ inputs.node-version }}
-      #     cache: "npm"
-      #     cache-dependency-path: ./package-lock.json
-      #     scope: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_NAMESPACE }}
-      #     registry-url: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_URL }}
-      #     token: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}
+      - name: Setup Node ${{ inputs.node-version }} for Private NPM
+        if:  ${{ inputs.npm-registry == 'private' }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ inputs.node-version }}
+          # cache: "npm"
+          # cache-dependency-path: ./package-lock.json
+          scope: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_NAMESPACE }}
+          registry-url: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_URL }}
+          # token: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}
       
-      # - name: Setup Node ${{ inputs.node-version }} for Public NPM
-      #   if:  ${{ inputs.npm-registry == 'public' }}
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     always-auth: true
-      #     node-version: ${{ inputs.node-version }}
-      #     cache: "npm"
-      #     cache-dependency-path: ./package-lock.json
-      #     token: ${{ secrets.NPMRC_NPMJS_REGISTRY_TOKEN }}
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{ secrets.NPMRC_NPMJS_REGISTRY_TOKEN }}
+      - name: Setup Node ${{ inputs.node-version }} for Public NPM
+        if:  ${{ inputs.npm-registry == 'public' }}
+        uses: actions/setup-node@v3
+        with:
+          always-auth: true
+          node-version: ${{ inputs.node-version }}
+          cache: "npm"
+          cache-dependency-path: ./package-lock.json
+          token: ${{ secrets.NPMRC_NPMJS_REGISTRY_TOKEN }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPMRC_NPMJS_REGISTRY_TOKEN }}
 
       - name: NPM publish
         shell: bash
