@@ -16,10 +16,6 @@ jobs:
           path: ./*
           key: build-cache-${{ github.sha }}
 
-      - name: PRINT NPMRC
-        shell: bash
-        run: cat .npmrc
-
       - name: NPM publish
         shell: bash
         run: |
