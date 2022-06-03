@@ -3,9 +3,6 @@ name: Reusable workflow - Version Bump
 on:
   workflow_call:
 
-env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 jobs:
   version_change:
     name: Version change
