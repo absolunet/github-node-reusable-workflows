@@ -62,6 +62,8 @@ jobs:
           if [[ $(npm pkg get version) == *"-"* ]]; then OPTS+=('--tag=next') ; fi
           if [[ $(npm pkg get workspaces) != "{}" ]]; then OPTS+=('--workspaces') ; fi
           npm publish $OPTS --access=public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}
 
       - name: Prepare git
         shell: bash
