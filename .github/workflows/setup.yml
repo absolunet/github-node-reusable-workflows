@@ -38,7 +38,7 @@ jobs:
       - name: PRINT INPUTS
         run: |
           echo ${{ inputs.branch-ref }}
-          echo ${{ inputs.node-auth-token }}
+          echo ${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}
           echo ${{ inputs.node-registry-url }}
           echo ${{ inputs.node-scope }}
 
