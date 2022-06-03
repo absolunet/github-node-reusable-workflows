@@ -7,10 +7,6 @@ on:
         required: true
         type: string
 
-env:
-  GIT_USERNAME: 'absobot'
-  GIT_EMAIL: 'absobot@absolunet.com'
-
 jobs:
   publish:
     name: Publish and Tag
@@ -36,8 +32,8 @@ jobs:
         shell: bash
         run: |
           git config --global core.autocrlf false
-          git config --global user.name $GIT_USERNAME
-          git config --global user.email $GIT_EMAIL
+          git config --global user.name "$(git --no-pager log --format=format:'%an' -n 1)"
+          git config --global user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
 
       - name: Git Tag
         shell: bash
