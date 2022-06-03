@@ -2,10 +2,6 @@ name: Reusable workflow - Publish
 
 on:
   workflow_call:
-    inputs:
-      branch-ref:
-        required: true
-        type: string
 
 jobs:
   publish:
