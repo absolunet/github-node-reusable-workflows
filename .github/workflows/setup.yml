@@ -81,9 +81,9 @@ jobs:
       - name: DEBUG
         shell: bash
         run: |
-          echo "public-registry: ${{public-registry}}"
-          echo "private-sparks: ${{private-sparks}}"
-          echo "no-access: ${{no-access}}"
+          echo "public-registry: ${{ env.public-registry }}"
+          echo "private-sparks: ${{ env.private-sparks }}"
+          echo "no-access: ${{ env.no-access }}"
 
       - name: Install dependencies
         run: npm ci
