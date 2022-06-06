@@ -18,6 +18,11 @@ on:
         required: false
         type: string
 
+env:
+  public-registry: ${{ inputs.access-needed == 'public-registry' }}
+  private-sparks: ${{ inputs.access-needed == 'private-sparks' }}
+  no-access: ${{ !env.public-registry && !env.private-sparks }}
+
 jobs:
   setup:
     name: Setup for Node.js ${{ inputs.node-version }} [github-node-manager-reusable-workflows/setup]
@@ -31,32 +36,32 @@ jobs:
 
       # No access needed
       - name: Install Node.js ${{ inputs.node-version }}
-        if: ${{ inputs.access-needed != 'public-registry' && inputs.access-needed != 'private-sparks' }}
+        if: ${{ env.no-access }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.node-version }}
-#          cache: "npm"
-#          cache-dependency-path: ./package-lock.json
+          cache: "npm"
+          cache-dependency-path: ./package-lock.json
 
       # Public registry access
       - name: Install Node.js ${{ inputs.node-version }} with public registry access
-        if: ${{ inputs.access-needed == 'public-registry' }}
+        if: ${{ env.public-registry }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.node-version }}
-#          cache: "npm"
-#          cache-dependency-path: ./package-lock.json
+          cache: "npm"
+          cache-dependency-path: ./package-lock.json
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPMRC_NPMJS_REGISTRY_TOKEN }}
 
       # Private Sparks access
       - name: Install Node.js ${{ inputs.node-version }} #with private Sparks access
-        if:  ${{ inputs.access-needed == 'private-sparks' }}
+        if: ${{ env.private-sparks }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.node-version }}
-#          cache: "npm"
-#          cache-dependency-path: ./package-lock.json
+          cache: "npm"
+          cache-dependency-path: ./package-lock.json
 #          scope: ${{ secrets.JFROG_ARTIFACTORY_NPM_SPARKS_SCOPE }}
 #          registry-url: ${{ secrets.JFROG_ARTIFACTORY_NPM_SPARKS_REGISTRY }}
 #        env:
@@ -64,7 +69,7 @@ jobs:
 
       # Patch step for JFrog Artifactory that uses _auth instead of standard _authToken
       - name: Generate .npmrc for JFrog Artifactory
-        if: ${{ inputs.access-needed == 'private-sparks' }}
+        if: ${{ env.private-sparks }}
         shell: bash
         run: |
           SCOPE=${{ secrets.JFROG_ARTIFACTORY_NPM_SPARKS_SCOPE }}
@@ -72,6 +77,13 @@ jobs:
           AUTH=${{ secrets.JFROG_ARTIFACTORY_NPM_SPARKS_AUTH }}
           echo "${SCOPE}:registry=${REGISTRY}" >> .npmrc
           echo "//${REGISTRY##*//}:_auth=${AUTH}" >> .npmrc
+
+      - name: DEBUG
+        shell: bash
+        run: |
+          echo "public-registry: ${{public-registry}}"
+          echo "private-sparks: ${{private-sparks}}"
+          echo "no-access: ${{no-access}}"
 
       - name: Install dependencies
         run: npm ci
