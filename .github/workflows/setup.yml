@@ -25,48 +25,51 @@ jobs:
         with:
           ref: ${{ inputs.branch-ref }}
           token: ${{ secrets.GLOBAL_ACCESS_TOKEN }}
-      
-      - name: Setup Node ${{ inputs.node-version }}
+
+#      - name: Install Node.js ${{ inputs.node-version }}
+#        uses: actions/setup-node@v3
+#        with:
+#          node-version: ${{ inputs.node-version }}
+#          cache: "npm"
+#          cache-dependency-path: ./package-lock.json
+
+      - name: Install Node.js ${{ inputs.node-version }}
+#        if:  ${{ inputs.npm-registry == 'private' }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.node-version }}
-          cache: "npm"
-          cache-dependency-path: ./package-lock.json
-      
-      # - name: Setup Node ${{ inputs.node-version }} for Private NPM
-      #   if:  ${{ inputs.npm-registry == 'private' }}
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     node-version: ${{ inputs.node-version }}
-      #     # cache: "npm"
-      #     # cache-dependency-path: ./package-lock.json
-      #     scope: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_NAMESPACE }}
-      #     registry-url: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_URL }}
-      #     # token: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}
-      
-      # - name: Setup Node ${{ inputs.node-version }} for Public NPM
-      #   if:  ${{ inputs.npm-registry == 'public' }}
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     always-auth: true
-      #     node-version: ${{ inputs.node-version }}
-      #     cache: "npm"
-      #     cache-dependency-path: ./package-lock.json
-      #     token: ${{ secrets.NPMRC_NPMJS_REGISTRY_TOKEN }}
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{ secrets.NPMRC_NPMJS_REGISTRY_TOKEN }}
-          
-      - name: Generate NPMRC
-        shell: bash
-        run: |
-          REGISTRY=${{ secrets.NPMRC_JFROG_ARTIFACTORY_URL }}
-          REGISTRY_NAMESPACE=${{ secrets.NPMRC_JFROG_ARTIFACTORY_NAMESPACE }}
-          echo "${REGISTRY_NAMESPACE}:registry=${REGISTRY}" >> .npmrc
-          echo "//${REGISTRY##*//}:always-auth=true" >> .npmrc
-          echo "//${REGISTRY##*//}:_auth=${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}" >> .npmrc
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPMRC_NPMJS_REGISTRY_TOKEN }}" >> .npmrc
+          # cache: "npm"
+          # cache-dependency-path: ./package-lock.json
+          scope: 'https://absolunet.jfrog.io/artifactory/api/npm/abso_npm_sparks/' #${{ secrets.NPMRC_JFROG_ARTIFACTORY_NAMESPACE }}
+          registry-url: '@absolunet-sparks' #${{ secrets.NPMRC_JFROG_ARTIFACTORY_URL }}
+          # token: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}
+
+#      - name: Install Node.js ${{ inputs.node-version }} with private access
+#        if:  ${{ inputs.npm-registry == 'public' }}
+#        uses: actions/setup-node@v3
+#        with:
+#          always-auth: true
+#          node-version: ${{ inputs.node-version }}
+#          cache: "npm"
+#          cache-dependency-path: ./package-lock.json
+#          token: ${{ secrets.NPMRC_NPMJS_REGISTRY_TOKEN }}
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.NPMRC_NPMJS_REGISTRY_TOKEN }}
+#
+#      - name: Generate .npmrc
+#        shell: bash
+#        run: |
+#          REGISTRY=${{ secrets.NPMRC_JFROG_ARTIFACTORY_URL }}
+#          REGISTRY_NAMESPACE=${{ secrets.NPMRC_JFROG_ARTIFACTORY_NAMESPACE }}
+#          echo "${REGISTRY_NAMESPACE}:registry=${REGISTRY}" >> .npmrc
+#          echo "//${REGISTRY##*//}:always-auth=true" >> .npmrc
+#          echo "//${REGISTRY##*//}:_auth=${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}" >> .npmrc
+#          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPMRC_NPMJS_REGISTRY_TOKEN }}" >> .npmrc
+
+      - name: DEBUG - Show .npmrc
+        run: cat .npmrc
 
       - name: Install dependencies
         run: npm ci
