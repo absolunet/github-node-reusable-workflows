@@ -14,6 +14,9 @@ on:
         required: false
         type: string
         default: ubuntu-latest
+      access-needed:
+        required: false
+        type: string
 
 jobs:
   setup:
@@ -26,41 +29,42 @@ jobs:
           ref: ${{ inputs.branch-ref }}
           token: ${{ secrets.GLOBAL_ACCESS_TOKEN }}
 
+      # No access needed
       - name: Install Node.js ${{ inputs.node-version }}
+        if: ${{ inputs.access-needed != 'public-registry' && inputs.access-needed != 'private-sparks' }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.node-version }}
           cache: "npm"
           cache-dependency-path: ./package-lock.json
 
-#      - name: Install Node.js ${{ inputs.node-version }}
-#        if:  ${{ inputs.npm-registry == 'private' }}
-#        uses: actions/setup-node@v3
-#        with:
-#          node-version: ${{ inputs.node-version }}
-#          # cache: "npm"
-#          # cache-dependency-path: ./package-lock.json
-#          scope: '@absolunet-sparks' #${{ secrets.NPMRC_JFROG_ARTIFACTORY_NAMESPACE }}
-#          registry-url: 'https://absolunet.jfrog.io/artifactory/api/npm/abso_npm_sparks/' #${{ secrets.NPMRC_JFROG_ARTIFACTORY_URL }}
-#          always-auth: true
-#          # token: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}
+      # Public registry access
+      - name: Install Node.js ${{ inputs.node-version }} with public registry access
+        if: ${{ inputs.access-needed == 'public-registry' }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: "npm"
+          cache-dependency-path: ./package-lock.json
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPMRC_NPMJS_REGISTRY_TOKEN }}
+
+      # Private Sparks access
+      - name: Install Node.js ${{ inputs.node-version }} #with private Sparks access
+        if:  ${{ inputs.access-needed == 'private-sparks' }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: "npm"
+          cache-dependency-path: ./package-lock.json
+#          scope: ${{ secrets.JFROG_ARTIFACTORY_NPM_SPARKS_SCOPE }}
+#          registry-url: ${{ secrets.JFROG_ARTIFACTORY_NPM_SPARKS_REGISTRY }}
 #        env:
-#          NODE_AUTH_TOKEN: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}
-#
-#      - name: Install Node.js ${{ inputs.node-version }} with private access
-#        if:  ${{ inputs.npm-registry == 'public' }}
-#        uses: actions/setup-node@v3
-#        with:
-#          always-auth: true
-#          node-version: ${{ inputs.node-version }}
-#          cache: "npm"
-#          cache-dependency-path: ./package-lock.json
-#          token: ${{ secrets.NPMRC_NPMJS_REGISTRY_TOKEN }}
-#        env:
-#          NODE_AUTH_TOKEN: ${{ secrets.NPMRC_NPMJS_REGISTRY_TOKEN }}
+#          NODE_AUTH_TOKEN: ${{ secrets.JFROG_ARTIFACTORY_NPM_SPARKS_TOKEN }}
 
       # Patch step for JFrog Artifactory that uses _auth instead of standard _authToken
       - name: Generate .npmrc for JFrog Artifactory
+        if: ${{ inputs.access-needed == 'private-sparks' }}
         shell: bash
         run: |
           SCOPE=${{ secrets.JFROG_ARTIFACTORY_NPM_SPARKS_SCOPE }}
