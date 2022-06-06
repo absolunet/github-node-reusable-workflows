@@ -70,7 +70,7 @@ jobs:
 #          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPMRC_NPMJS_REGISTRY_TOKEN }}" >> .npmrc
 
       - name: DEBUG - Show .npmrc
-        run: cat /home/runner/work/_temp/.npmrc > /dev/null 2>&1
+        run: cat /home/runner/work/_temp/.npmrc
 
       - name: Install dependencies
         run: npm ci
