@@ -35,8 +35,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.node-version }}
-          cache: "npm"
-          cache-dependency-path: ./package-lock.json
+#          cache: "npm"
+#          cache-dependency-path: ./package-lock.json
 
       # Public registry access
       - name: Install Node.js ${{ inputs.node-version }} with public registry access
@@ -44,8 +44,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.node-version }}
-          cache: "npm"
-          cache-dependency-path: ./package-lock.json
+#          cache: "npm"
+#          cache-dependency-path: ./package-lock.json
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPMRC_NPMJS_REGISTRY_TOKEN }}
 
@@ -55,8 +55,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.node-version }}
-          cache: "npm"
-          cache-dependency-path: ./package-lock.json
+#          cache: "npm"
+#          cache-dependency-path: ./package-lock.json
 #          scope: ${{ secrets.JFROG_ARTIFACTORY_NPM_SPARKS_SCOPE }}
 #          registry-url: ${{ secrets.JFROG_ARTIFACTORY_NPM_SPARKS_REGISTRY }}
 #        env:
