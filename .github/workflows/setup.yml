@@ -45,7 +45,7 @@ jobs:
 
       # Public registry access
       - name: Install Node.js ${{ inputs.node-version }} with public registry access
-        if: ${{ env.public-registry }}
+        if: ${{ false }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.node-version }}
@@ -56,7 +56,7 @@ jobs:
 
       # Private Sparks access
       - name: Install Node.js ${{ inputs.node-version }} #with private Sparks access
-        if: ${{ env.private-sparks }}
+        if: ${{ false }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.node-version }}
