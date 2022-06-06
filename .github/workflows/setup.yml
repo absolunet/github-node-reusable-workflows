@@ -69,8 +69,8 @@ jobs:
 #          echo "//${REGISTRY##*//}:_auth=${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}" >> .npmrc
 #          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPMRC_NPMJS_REGISTRY_TOKEN }}" >> .npmrc
 
-#      - name: DEBUG - Show .npmrc
-#        run: cat .npmrc > /dev/null 2>&1
+      - name: DEBUG - Show .npmrc
+        run: cat /home/runner/work/_temp/.npmrc > /dev/null 2>&1
 
       - name: Install dependencies
         run: npm ci
