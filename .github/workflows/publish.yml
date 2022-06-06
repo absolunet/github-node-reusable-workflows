@@ -1,22 +1,22 @@
-name: Reusable workflow - Publish
+name: Node Manager reusable workflows - Publish
 
 on:
   workflow_call:
 
 jobs:
   publish:
-    name: Publish and Tag
+    name: Publish packages [github-node-manager-reusable-workflows/publish]
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: Use build-cache
+      - name: Fetch build-cache
         uses: actions/cache@v3
         id: build-cache
         with:
           path: ./*
           key: build-cache-${{ github.sha }}
-      
-      - name: NPM publish
+
+      - name: Publish to registry
         shell: bash
         run: |
           OPTS=();
@@ -24,14 +24,14 @@ jobs:
           if [[ $(npm pkg get workspaces) != "{}" ]]; then OPTS+=('--workspaces') ; fi
           npm publish $OPTS --access=public
 
-      - name: Prepare git
+      - name: Configure git
         shell: bash
         run: |
           git config --global core.autocrlf false
           git config --global user.name "$(git --no-pager log --format=format:'%an' -n 1)"
           git config --global user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
 
-      - name: Git Tag
+      - name: Tag commit
         shell: bash
         run: |
           TAG_VERSION=$(npm pkg get version | xargs)
