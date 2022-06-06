@@ -2,16 +2,6 @@ name: Reusable workflow - Test
 
 on:
   workflow_call:
-    inputs:
-      node-auth-token:
-        required: false
-        type: string
-      node-registry-url:
-        required: false
-        type: string
-      node-scope:
-        required: false
-        type: string
 
 jobs:
   test:
@@ -34,14 +24,9 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          always-auth: true
           node-version: ${{ matrix.node-version }}
           cache: "npm"
           cache-dependency-path: ./package-lock.json
-          scope: ${{ inputs.node-scope }}
-          registry-url: ${{ inputs.node-registry-url }}
-        env:
-          NODE_AUTH_TOKEN: ${{ inputs.node-auth-token }}
 
       - name: Install dependencies
         run: npm ci
