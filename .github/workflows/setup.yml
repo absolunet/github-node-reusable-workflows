@@ -36,7 +36,7 @@ jobs:
 
       # No access needed
       - name: Install Node.js ${{ inputs.node-version }}
-        if: ${{ env.no-access }}
+        if: ${{ env.no-access == true }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.node-version }}
@@ -45,7 +45,7 @@ jobs:
 
       # Public registry access
       - name: Install Node.js ${{ inputs.node-version }} with public registry access
-        if: ${{ false }}
+        if: ${{ env.public-registry == true }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.node-version }}
@@ -55,8 +55,8 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPMRC_NPMJS_REGISTRY_TOKEN }}
 
       # Private Sparks access
-      - name: Install Node.js ${{ inputs.node-version }} #with private Sparks access
-        if: ${{ false }}
+      - name: Install Node.js ${{ inputs.node-version }} with private Sparks access
+        if: ${{ env.private-sparks == true }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.node-version }}
