@@ -37,7 +37,7 @@ jobs:
 
       # No access needed
       - name: Install Node.js ${{ inputs.node-version }}
-        if: ${{ env.no-access == true }}
+        if: ${{ env.no-access == 'true' }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.node-version }}
@@ -46,7 +46,7 @@ jobs:
 
       # Public registry access
       - name: Install Node.js ${{ inputs.node-version }} with public registry access
-        if: ${{ env.public-registry == true }}
+        if: ${{ env.public-registry == 'true' }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.node-version }}
@@ -57,7 +57,7 @@ jobs:
 
       # Private Sparks access
       - name: Install Node.js ${{ inputs.node-version }} with private Sparks access
-        if: ${{ env.private-sparks == true }}
+        if: ${{ env.private-sparks == 'true' }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.node-version }}
@@ -70,7 +70,7 @@ jobs:
 
       # Patch step for JFrog Artifactory that uses _auth instead of standard _authToken
       - name: Generate .npmrc for JFrog Artifactory
-        if: ${{ env.private-sparks }}
+        if: ${{ env.private-sparks == 'true' }}
         shell: bash
         run: |
           SCOPE=${{ secrets.JFROG_ARTIFACTORY_NPM_SPARKS_SCOPE }}
