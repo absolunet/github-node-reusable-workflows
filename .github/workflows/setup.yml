@@ -42,6 +42,7 @@ jobs:
           # cache-dependency-path: ./package-lock.json
           scope: '@absolunet-sparks' #${{ secrets.NPMRC_JFROG_ARTIFACTORY_NAMESPACE }}
           registry-url: 'https://absolunet.jfrog.io/artifactory/api/npm/abso_npm_sparks/' #${{ secrets.NPMRC_JFROG_ARTIFACTORY_URL }}
+          always-auth: true
           # token: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPMRC_JFROG_ARTIFACTORY_TOKEN }}
