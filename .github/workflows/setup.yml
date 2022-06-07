@@ -29,63 +29,77 @@ jobs:
     runs-on: ${{ inputs.os }}
 
     steps:
-      - name: Checkout repository ${{ inputs.branch-ref }}
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ inputs.branch-ref }}
-          token: ${{ secrets.GLOBAL_ACCESS_TOKEN }}
-
-      # No access needed
-      - name: Install Node.js ${{ inputs.node-version }}
-        if: ${{ env.no-access == 'true' }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ inputs.node-version }}
-
-      # Public registry access
-      - name: Install Node.js ${{ inputs.node-version }} with public registry access
-        if: ${{ env.public-registry == 'true' }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ inputs.node-version }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPMRC_NPMJS_REGISTRY_TOKEN }}
-
-      # Private Sparks access
-      - name: Install Node.js ${{ inputs.node-version }} with private Sparks access
-        if: ${{ env.private-sparks == 'true' }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ inputs.node-version }}
-#          scope: ${{ secrets.JFROG_ARTIFACTORY_NPM_SPARKS_SCOPE }}
-#          registry-url: ${{ secrets.JFROG_ARTIFACTORY_NPM_SPARKS_REGISTRY }}
-#        env:
-#          NODE_AUTH_TOKEN: ${{ secrets.JFROG_ARTIFACTORY_NPM_SPARKS_TOKEN }}
-
-      # Patch step for JFrog Artifactory that uses _auth instead of standard _authToken
-      - name: Generate .npmrc for JFrog Artifactory
-        if: ${{ env.private-sparks == 'true' }}
-        shell: bash
-        run: |
-          SCOPE=${{ secrets.JFROG_ARTIFACTORY_NPM_SPARKS_SCOPE }}
-          REGISTRY=${{ secrets.JFROG_ARTIFACTORY_NPM_SPARKS_REGISTRY }}
-          AUTH=${{ secrets.JFROG_ARTIFACTORY_NPM_SPARKS_AUTH }}
-          echo "${SCOPE}:registry=${REGISTRY}" >> .npmrc
-          echo "//${REGISTRY##*//}:_auth=${AUTH}" >> .npmrc
-
       - name: DEBUG
         shell: bash
         run: |
-          echo "public-registry: ${{ env.public-registry }}"
-          echo "private-sparks: ${{ env.private-sparks }}"
-          echo "no-access: ${{ env.no-access }}"
+          echo "direct-clean-stuff       = || ${{ inputs.direct-clean-stuff }} ||"
+          echo "direct-static-stuff      = || ${{ inputs.direct-static-stuff }} ||"
+          echo "direct-group-stuff       = || ${{ inputs.direct-group-stuff }} ||"
+          echo "direct-staticgroup-stuff = || ${{ inputs.direct-staticgroup-stuff }} ||"
+          echo "direct-unrelated-stuff   = || ${{ inputs.direct-unrelated-stuff }} ||"
+          echo "env-clean-stuff          = || ${{ inputs.env-clean-stuff }} ||"
+          echo "env-static-stuff         = || ${{ inputs.env-static-stuff }} ||"
+          echo "env-group-stuff          = || ${{ inputs.env-group-stuff }} ||"
+          echo "env-staticgroup-stuff    = || ${{ inputs.env-staticgroup-stuff }} ||"
+          echo "env-unrelated-stuff      = || ${{ inputs.env-unrelated-stuff }} ||"
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Create cache
-        uses: actions/cache@v3
-        id: checkout-repository-cache
-        with:
-          path: ./*
-          key: checkout-repository-cache-${{ github.sha }}
+#      - name: Checkout repository ${{ inputs.branch-ref }}
+#        uses: actions/checkout@v3
+#        with:
+#          ref: ${{ inputs.branch-ref }}
+#          token: ${{ secrets.GLOBAL_ACCESS_TOKEN }}
+#
+#      # No access needed
+#      - name: Install Node.js ${{ inputs.node-version }}
+#        if: ${{ env.no-access == 'true' }}
+#        uses: actions/setup-node@v3
+#        with:
+#          node-version: ${{ inputs.node-version }}
+#
+#      # Public registry access
+#      - name: Install Node.js ${{ inputs.node-version }} with public registry access
+#        if: ${{ env.public-registry == 'true' }}
+#        uses: actions/setup-node@v3
+#        with:
+#          node-version: ${{ inputs.node-version }}
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.NPMRC_NPMJS_REGISTRY_TOKEN }}
+#
+#      # Private Sparks access
+#      - name: Install Node.js ${{ inputs.node-version }} with private Sparks access
+#        if: ${{ env.private-sparks == 'true' }}
+#        uses: actions/setup-node@v3
+#        with:
+#          node-version: ${{ inputs.node-version }}
+##          scope: ${{ secrets.JFROG_ARTIFACTORY_NPM_SPARKS_SCOPE }}
+##          registry-url: ${{ secrets.JFROG_ARTIFACTORY_NPM_SPARKS_REGISTRY }}
+##        env:
+##          NODE_AUTH_TOKEN: ${{ secrets.JFROG_ARTIFACTORY_NPM_SPARKS_TOKEN }}
+#
+#      # Patch step for JFrog Artifactory that uses _auth instead of standard _authToken
+#      - name: Generate .npmrc for JFrog Artifactory
+#        if: ${{ env.private-sparks == 'true' }}
+#        shell: bash
+#        run: |
+#          SCOPE=${{ secrets.JFROG_ARTIFACTORY_NPM_SPARKS_SCOPE }}
+#          REGISTRY=${{ secrets.JFROG_ARTIFACTORY_NPM_SPARKS_REGISTRY }}
+#          AUTH=${{ secrets.JFROG_ARTIFACTORY_NPM_SPARKS_AUTH }}
+#          echo "${SCOPE}:registry=${REGISTRY}" >> .npmrc
+#          echo "//${REGISTRY##*//}:_auth=${AUTH}" >> .npmrc
+#
+#      - name: DEBUG
+#        shell: bash
+#        run: |
+#          echo "public-registry: ${{ env.public-registry }}"
+#          echo "private-sparks: ${{ env.private-sparks }}"
+#          echo "no-access: ${{ env.no-access }}"
+#
+#      - name: Install dependencies
+#        run: npm ci
+#
+#      - name: Create cache
+#        uses: actions/cache@v3
+#        id: checkout-repository-cache
+#        with:
+#          path: ./*
+#          key: checkout-repository-cache-${{ github.sha }}
