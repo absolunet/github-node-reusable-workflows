@@ -34,6 +34,7 @@ env:
   public-registry: ${{ inputs.access-needed == 'public-registry' }}
   private-sparks: ${{ inputs.access-needed == 'private-sparks' }}
   no-access: ${{ inputs.access-needed != 'public-registry' && inputs.access-needed != 'private-sparks' }}
+  yoyoyo: ${{ secret.yoyoyo }}
 
 jobs:
   setup:
@@ -55,6 +56,24 @@ jobs:
           echo "env-group-stuff          = || ${{ inputs.env-group-stuff }} ||"
           echo "env-staticgroup-stuff    = || ${{ inputs.env-staticgroup-stuff }} ||"
           echo "env-unrelated-stuff      = || ${{ inputs.env-unrelated-stuff }} ||"
+
+      - name: DEBUG - VAR COMPARE
+        if: ${{ secret.yoyoyo == inputs.direct-static-stuff }}
+        shell: bash
+        run: |
+          echo "variable compare works"
+
+      - name: DEBUG - STATIC COMPARE
+        if: ${{ secret.yoyoyo == 'slim marshall mathers' }}
+        shell: bash
+        run: |
+          echo "static compare works"
+
+      - name: DEBUG - ISN'T COMPARING STARS
+        if: ${{ secret.yoyoyo != '***' }}
+        shell: bash
+        run: |
+          echo "not stars"
 
 #      - name: Checkout repository ${{ inputs.branch-ref }}
 #        uses: actions/checkout@v3
