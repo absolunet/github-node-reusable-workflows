@@ -26,6 +26,9 @@ on:
       direct-unrelated-stuff:
         required: false
         type: string
+    secrets:
+      yoyoyo:
+        required: false
 
 env:
   public-registry: ${{ inputs.access-needed == 'public-registry' }}
@@ -41,6 +44,7 @@ jobs:
       - name: DEBUG
         shell: bash
         run: |
+          echo "secrets.yoyoyo           = || ${{ secrets.yoyoyo }} ||"
           echo "direct-clean-stuff       = || ${{ inputs.direct-clean-stuff }} ||"
           echo "direct-static-stuff      = || ${{ inputs.direct-static-stuff }} ||"
           echo "direct-group-stuff       = || ${{ inputs.direct-group-stuff }} ||"
