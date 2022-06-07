@@ -17,6 +17,15 @@ on:
       access-needed:
         required: false
         type: string
+      direct-static-stuff:
+        required: false
+        type: string
+      direct-staticgroup-stuff:
+        required: false
+        type: string
+      direct-unrelated-stuff:
+        required: false
+        type: string
 
 env:
   public-registry: ${{ inputs.access-needed == 'public-registry' }}
