@@ -72,6 +72,12 @@ jobs:
         run: |
           echo "not stars"
 
+      - name: DEBUG - SHOULD SKIP
+        if: ${{ env.yoyoyo == '***' }}
+        shell: bash
+        run: |
+          echo "stars"
+
       - name: INSULT - STATIC COMPARE
         if: ${{ env.insult == 'ta mère' }}
         shell: bash
@@ -83,6 +89,12 @@ jobs:
         shell: bash
         run: |
           echo "not stars"
+
+      - name: INSULT - SHOULD SKIP
+        if: ${{ env.insult == '***' }}
+        shell: bash
+        run: |
+          echo "stars"
 
 #      - name: Checkout repository ${{ inputs.branch-ref }}
 #        uses: actions/checkout@v3
