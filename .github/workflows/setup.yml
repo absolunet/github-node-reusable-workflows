@@ -36,6 +36,7 @@ env:
   private-sparks: ${{ inputs.access-needed == 'private-sparks' }}
   no-access: ${{ inputs.access-needed != 'public-registry' && inputs.access-needed != 'private-sparks' }}
   yoyoyo: ${{ secrets.yoyoyo }}
+  insult: ${{ secrets.insult }}
 
 jobs:
   setup:
@@ -59,32 +60,26 @@ jobs:
           echo "env-staticgroup-stuff    = || ${{ inputs.env-staticgroup-stuff }} ||"
           echo "env-unrelated-stuff      = || ${{ inputs.env-unrelated-stuff }} ||"
 
-      - name: DEBUG - VAR COMPARE
-        if: ${{ secrets.yoyoyo == inputs.direct-static-stuff }}
-        shell: bash
-        run: |
-          echo "variable compare works"
-
       - name: DEBUG - STATIC COMPARE
-        if: ${{ secrets.yoyoyo == 'slim marshall mathers' }}
+        if: ${{ env.yoyoyo == 'slim marshall mathers' }}
         shell: bash
         run: |
           echo "static compare works"
 
-      - name: DEBUG - ISN'T COMPARING STARS
-        if: ${{ secrets.yoyoyo != '***' }}
+      - name: DEBUG - ISN'T STARS
+        if: ${{ env.yoyoyo != '***' }}
         shell: bash
         run: |
           echo "not stars"
 
       - name: INSULT - STATIC COMPARE
-        if: ${{ secrets.insult == 'ta mère' }}
+        if: ${{ env.insult == 'ta mère' }}
         shell: bash
         run: |
           echo "static compare works"
 
-      - name: INSULT - ISN'T COMPARING STARS
-        if: ${{ secrets.insult != '***' }}
+      - name: INSULT - ISN'T STARS
+        if: ${{ env.insult != '***' }}
         shell: bash
         run: |
           echo "not stars"
