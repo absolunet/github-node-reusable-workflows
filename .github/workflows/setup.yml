@@ -21,6 +21,7 @@ on:
     secrets:
       github-token:
         required: false
+        default: ${{ github.token }}
       scope:
         required: false
       registry-url:
@@ -41,6 +42,8 @@ jobs:
     runs-on: ${{ inputs.os }}
 
     steps:
+      - name: DEBUG
+        run: echo ${{ github.token }}
       - name: Checkout repository ${{ inputs.branch-ref }}
         uses: actions/checkout@v3
         with:
