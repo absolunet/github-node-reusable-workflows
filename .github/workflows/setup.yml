@@ -31,6 +31,7 @@ on:
 env:
   standard-setup: ${{ inputs.jfrog-artifactory != true }}
   jfrog-artifactory-setup: ${{ inputs.jfrog-artifactory == true }}
+  has_token: ${{ secrets.github-token }}
 
 permissions:
   contents: read
@@ -49,7 +50,9 @@ jobs:
             echo ::set-output has_token=false
           fi
       - name: DEBUG
-        run: echo ${{ steps.token_check.outputs.has_token }}
+        run: |
+          echo HAS_TOKEN=$has_token
+          echo ${{ steps.token_check.outputs.has_token }}
 
       - name: Checkout repository ${{ inputs.branch-ref }} with token
         uses: actions/checkout@v3
