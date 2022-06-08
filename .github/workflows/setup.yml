@@ -41,7 +41,7 @@ jobs:
     runs-on: ${{ inputs.os }}
 
     steps:
-      - id: Check Token passed to input
+      - id: token_check
         run: |
           if ! [[ -z "${{ secrets.github-token }}" ]]; then
             echo ::set-output has_token=true
@@ -51,14 +51,14 @@ jobs:
 
       - name: Checkout repository ${{ inputs.branch-ref }} with token
         uses: actions/checkout@v3
-        if: steps.setup.outputs.has_token == 'true'
+        if: steps.token_check.outputs.has_token == 'true'
         with:
           ref: ${{ inputs.branch-ref }}
           token: ${{ secrets.github-token }}
 
       - name: Checkout repository ${{ inputs.branch-ref }} with default token
         uses: actions/checkout@v3
-        if: steps.setup.outputs.has_token != 'true'
+        if: steps.token_check.outputs.has_token != 'true'
         with:
           ref: ${{ inputs.branch-ref }}
 
