@@ -45,6 +45,7 @@ jobs:
       - name: DEBUG
         run: |
           echo HAS_TOKEN=$has_token
+          echo github-token=$github-token
 
       - name: Checkout repository ${{ inputs.branch-ref }} with token
         uses: actions/checkout@v3
