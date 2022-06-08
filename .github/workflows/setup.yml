@@ -46,19 +46,20 @@ jobs:
         run: |
           echo HAS_TOKEN=$has_token
           echo github-token=${{ github.token }}
+          echo TOKENPASS= ${{ secrets.github-token || github.token }}
 
       - name: Checkout repository ${{ inputs.branch-ref }} with token
         uses: actions/checkout@v3
-        if: ${{ env.has_token == 'true' }}
+        # if: ${{ env.has_token == 'true' }}
         with:
           ref: ${{ inputs.branch-ref }}
-          token: ${{ secrets.github-token }}
+          token: ${{ secrets.github-token || github.token }}
 
-      - name: Checkout repository ${{ inputs.branch-ref }} with default token
-        uses: actions/checkout@v3
-        if: ${{ env.has_token == 'false' }}
-        with:
-          ref: ${{ inputs.branch-ref }}
+      # - name: Checkout repository ${{ inputs.branch-ref }} with default token
+      #   uses: actions/checkout@v3
+      #   if: ${{ env.has_token == 'false' }}
+      #   with:
+      #     ref: ${{ inputs.branch-ref }}
 
       # Standard setup
       - name: Install Node.js ${{ inputs.node-version }}
