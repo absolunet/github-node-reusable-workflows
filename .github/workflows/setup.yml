@@ -55,7 +55,7 @@ jobs:
 
       - name: Checkout repository ${{ inputs.branch-ref }} with default token
         uses: actions/checkout@v3
-        if: ${{ ! env.has_token }}
+        if: ${{ env.has_token == 'false' }}
         with:
           ref: ${{ inputs.branch-ref }}
 
