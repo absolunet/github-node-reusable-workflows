@@ -57,7 +57,7 @@ jobs:
         if: ${{ steps.has-secrets-check.outputs.has-secrets != 'true' }}
         run: echo 'NO SCOPE'
       - name: DEBUG WITH SCOPE
-         if: ${{ steps.has-secrets-check.outputs.has-secrets == 'true' }}
+        if: ${{ steps.has-secrets-check.outputs.has-secrets == 'true' }}
         run: echo 'WITH SCOPE'
 
       - name: Checkout repository ${{ inputs.branch-ref }}
