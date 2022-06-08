@@ -40,12 +40,18 @@ jobs:
     name: Setup for Node.js ${{ inputs.node-version }} [github-node-manager-reusable-workflows/setup]
     runs-on: ${{ inputs.os }}
 
+    outputs:
+      has-secrets: ${{ steps.has-secrets-check.outputs.has-secrets }}
+
     steps:
+      - id: has-secrets-check
+        env:
+          SECRET_TO_CHECK: '${{ secrets.scope }}'
       - name: DEBUG NO SCOPE
-        if: ${{ ! secrets.scope }}
+        if: ${{ env.SECRET_TO_CHECK != '' }}
         run: echo 'NO SCOPE'
       - name: DEBUG WITH SCOPE
-        if: ${{ secrets.scope }}
+        if: ${{ env.SECRET_TO_CHECK != '' }}
         run: echo 'WITH SCOPE'
 
       - name: Checkout repository ${{ inputs.branch-ref }}
