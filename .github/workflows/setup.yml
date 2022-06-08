@@ -40,7 +40,7 @@ jobs:
     steps:
       - name: DEBUG
         run: |
-          echo github.token =  ${{ secrets.github-token }}
+          echo github.token =  ${{ github.token }}
 
       - name: Checkout repository ${{ inputs.branch-ref }}
         uses: actions/checkout@v3
