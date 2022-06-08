@@ -48,7 +48,7 @@ jobs:
 
       - name: Checkout repository ${{ inputs.branch-ref }} with token
         uses: actions/checkout@v3
-        if: ${{ env.has_token }}
+        if: ${{ env.has_token == 'true' }}
         with:
           ref: ${{ inputs.branch-ref }}
           token: ${{ secrets.github-token }}
