@@ -41,7 +41,14 @@ jobs:
     runs-on: ${{ inputs.os }}
 
     steps:
-      - name: Checkout repository ${{ inputs.branch-ref }} with token
+      - name: DEBUG NO SCOPE
+        if: ${{ ! secrets.scope }}
+        run: echo 'NO SCOPE'
+      - name: DEBUG WITH SCOPE
+        if: ${{ secrets.scope }}
+        run: echo 'WITH SCOPE'
+
+      - name: Checkout repository ${{ inputs.branch-ref }}
         uses: actions/checkout@v3
         with:
           ref: ${{ inputs.branch-ref }}
