@@ -20,7 +20,7 @@ on:
         default: false
     secrets:
       github-token:
-        required: true
+        required: false
       scope:
         required: false
       registry-url:
