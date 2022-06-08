@@ -29,6 +29,8 @@ on:
     secrets:
       yoyoyo:
         required: false
+      nonono:
+        required: false
       insult:
         required: false
 env:
@@ -36,6 +38,7 @@ env:
   private-sparks: ${{ inputs.access-needed == 'private-sparks' }}
   no-access: ${{ inputs.access-needed != 'public-registry' && inputs.access-needed != 'private-sparks' }}
   yoyoyo: ${{ secrets.yoyoyo }}
+  nonono: ${{ secrets.nonono }}
   insult: ${{ secrets.insult }}
 
 jobs:
@@ -48,6 +51,7 @@ jobs:
         shell: bash
         run: |
           echo "secrets.yoyoyo           = || ${{ secrets.yoyoyo }} ||"
+          echo "secrets.nonono           = || ${{ secrets.nonono }} ||"
           echo "secrets.insult           = || ${{ secrets.insult }} ||"
           echo "direct-clean-stuff       = || ${{ inputs.direct-clean-stuff }} ||"
           echo "direct-static-stuff      = || ${{ inputs.direct-static-stuff }} ||"
@@ -74,6 +78,24 @@ jobs:
 
       - name: DEBUG - SHOULD SKIP
         if: ${{ env.yoyoyo == '***' }}
+        shell: bash
+        run: |
+          echo "stars"
+
+      - name: ENV - STATIC COMPARE
+        if: ${{ env.nonono == 'slim marshall mathers' }}
+        shell: bash
+        run: |
+          echo "static compare works"
+
+      - name: ENV - ISN'T STARS
+        if: ${{ env.nonono != '***' }}
+        shell: bash
+        run: |
+          echo "not stars"
+
+      - name: ENV - SHOULD SKIP
+        if: ${{ env.nonono == '***' }}
         shell: bash
         run: |
           echo "stars"
