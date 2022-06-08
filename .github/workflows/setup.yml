@@ -14,10 +14,10 @@ on:
         required: false
         type: string
         default: ubuntu-latest
-      # jfrog-artifactory:
-      #   required: false
-      #   type: boolean
-      #   default: false
+      jfrog-artifactory:
+        required: false
+        type: boolean
+        default: false
     secrets:
       github-token:
         required: false
