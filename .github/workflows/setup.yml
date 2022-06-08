@@ -21,7 +21,7 @@ on:
     secrets:
       github-token:
         required: false
-        default: ${{ github.token }}
+        default: ''
       scope:
         required: false
       registry-url:
