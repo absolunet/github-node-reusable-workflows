@@ -31,7 +31,7 @@ on:
 env:
   standard-setup: ${{ inputs.jfrog-artifactory != true }}
   jfrog-artifactory-setup: ${{ inputs.jfrog-artifactory == true }}
-  has_token: ${{ secrets.github-token }}
+  has_token: ${{ secrets.github-token && true || false }}
 
 permissions:
   contents: read
