@@ -39,8 +39,9 @@ jobs:
       - name: Configure git
         shell: bash
         run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "<>"
+          git config --global core.autocrlf false
+          git config --global user.name "$(git --no-pager log --format=format:'%an' -n 1)"
+          git config --global user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
 
       - name: Commit changes
         shell: bash
