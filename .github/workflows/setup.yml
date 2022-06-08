@@ -48,6 +48,8 @@ jobs:
           else
             echo ::set-output has_token=false
           fi
+      - name: DEBUG
+        run: echo ${{ steps.token_check.outputs.has_token }}
 
       - name: Checkout repository ${{ inputs.branch-ref }} with token
         uses: actions/checkout@v3
