@@ -3,6 +3,9 @@ name: Node Manager reusable workflows - Test
 on:
   workflow_call:
 
+permissions:
+  contents: read
+
 jobs:
   test:
     strategy:
