@@ -32,6 +32,10 @@ env:
   standard-setup: ${{ inputs.jfrog-artifactory != true }}
   jfrog-artifactory-setup: ${{ inputs.jfrog-artifactory == true }}
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   setup:
     name: Setup for Node.js ${{ inputs.node-version }} [github-node-manager-reusable-workflows/setup]
@@ -46,7 +50,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ inputs.branch-ref }}
-          token: ${{ secrets.github-token }}
+          # token: ${{ secrets.github-token }}
 
 
       # Standard setup
