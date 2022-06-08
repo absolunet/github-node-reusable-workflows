@@ -27,6 +27,9 @@ on:
         required: false
       auth-token:
         required: false
+    outputs:
+      has-secrets:
+        value: ${{ jobs.setup.outputs.has-secrets }}
 
 env:
   standard-setup: ${{ inputs.jfrog-artifactory != true }}
@@ -47,11 +50,12 @@ jobs:
       - id: has-secrets-check
         env:
           SECRET_TO_CHECK: '${{ secrets.scope }}'
+        run: echo 'TEST'
       - name: DEBUG NO SCOPE
         if: ${{ env.SECRET_TO_CHECK != '' }}
         run: echo 'NO SCOPE'
       - name: DEBUG WITH SCOPE
-        if: ${{ env.SECRET_TO_CHECK != '' }}
+        if: ${{ env.SECRET_TO_CHECK }}
         run: echo 'WITH SCOPE'
 
       - name: Checkout repository ${{ inputs.branch-ref }}
