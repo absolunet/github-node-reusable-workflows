@@ -49,14 +49,14 @@ jobs:
 
       - name: Checkout repository ${{ inputs.branch-ref }} with token
         uses: actions/checkout@v3
-        if: $has_token
+        if: ${{ has_token }}
         with:
           ref: ${{ inputs.branch-ref }}
           token: ${{ secrets.github-token }}
 
       - name: Checkout repository ${{ inputs.branch-ref }} with default token
         uses: actions/checkout@v3
-        if: ! $has_token
+        if: ${{ ! has_token }}
         with:
           ref: ${{ inputs.branch-ref }}
 
