@@ -46,6 +46,7 @@ jobs:
         run: |
           echo github.token =  ${{ github.token }}
           echo $GITHUB_ACTOR:$GITHUB_TOKEN
+          echo INPUT REPO=$INPUT_REPO
 
       - name: Checkout repository ${{ inputs.branch-ref }}
         uses: actions/checkout@v3
