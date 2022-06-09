@@ -47,8 +47,7 @@ jobs:
           SECRET_SCOPE: '${{ secrets.scope }}'
           SECRET_REGISTRY_URL: '${{ secrets.registry-url }}'
         if: ${{ env.SECRET_SCOPE != '' }} && ${{ env.SECRET_REGISTRY_URL != '' }}
-        run: |
-          echo "::set-output name=has-secrets::true"
+        run: echo "::set-output name=has-secrets::true"
 
       - name: Checkout repository ${{ inputs.branch-ref }}
         uses: actions/checkout@v3
