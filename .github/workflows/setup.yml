@@ -14,10 +14,6 @@ on:
         required: false
         type: string
         default: ubuntu-latest
-      # jfrog-artifactory:
-      #   required: false
-      #   type: boolean
-      #   default: false
     secrets:
       github-token:
         required: false
@@ -27,16 +23,11 @@ on:
         required: false
       auth-token:
         required: true
-    #PLM
     outputs: 
       has-scope:
         value: ${{ jobs.setup.outputs.has-scope }}
       has-registry-url:
         value: ${{ jobs.setup.outputs.has-registry-url }}
-    #END_PLM
-# env:
-#   standard-setup: ${{ inputs.jfrog-artifactory != true }}
-#   jfrog-artifactory-setup: ${{ inputs.jfrog-artifactory == true }}
 
 permissions:
   contents: read
@@ -46,13 +37,11 @@ jobs:
     name: Setup for Node.js ${{ inputs.node-version }} [github-node-manager-reusable-workflows/setup]
     runs-on: ${{ inputs.os }}
 
-    #PLM
     outputs:
       has-scope: ${{ steps.has-secrets-check.outputs.has-scope }}
       has-registry-url: ${{ steps.has-secrets-check.outputs.has-registry-url }}
-    #END_PLM
+
     steps:
-      #PLM
       - id: has-secrets-check
         env:
           SECRET_SCOPE: '${{ secrets.scope }}'
@@ -60,7 +49,6 @@ jobs:
         if: ${{ env.SECRET_SCOPE != '' }} && ${{ env.SECRET_REGISTRY_URL != '' }}
         run: |
           echo "::set-output name=has-secrets::true"
-      #END_PLM
 
       - name: Checkout repository ${{ inputs.branch-ref }}
         uses: actions/checkout@v3
@@ -70,7 +58,6 @@ jobs:
 
       # Standard setup
       - name: Install Node.js ${{ inputs.node-version }}
-        # if: ${{ env.standard-setup == 'true' }}
         if: ${{ steps.has-secrets-check.outputs.has-secrets != 'true' }}
         uses: actions/setup-node@v3
         with:
@@ -85,7 +72,6 @@ jobs:
 
       # Private Registry setup because it uses _auth instead of standard _authToken
       - name: Install Node.js ${{ inputs.node-version }} for Private Registry
-        # if: ${{ env.jfrog-artifactory-setup == 'true' }}
         if: ${{ steps.has-secrets-check.outputs.has-secrets == 'true' }}
         uses: actions/setup-node@v3
         with:
@@ -94,7 +80,6 @@ jobs:
           cache-dependency-path: ./package-lock.json
 
       - name: Generate .npmrc for Private Registry
-        # if: ${{ env.jfrog-artifactory-setup == 'true' }}
         if: ${{ steps.has-secrets-check.outputs.has-secrets == 'true' }}
         shell: bash
         run: |
