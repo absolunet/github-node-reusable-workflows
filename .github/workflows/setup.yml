@@ -65,8 +65,8 @@ jobs:
 
       # Standard setup
       - name: Install Node.js ${{ inputs.node-version }}
-        # if: ${{ env.standard-setup == 'true' }}
-        if: ${{ steps.has-secrets-check.outputs.has-secrets != 'true' }}
+        if: ${{ env.standard-setup == 'true' }}
+        # if: ${{ steps.has-secrets-check.outputs.has-secrets != 'true' }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.node-version }}
@@ -80,8 +80,8 @@ jobs:
 
       # JFrog Artifactory setup because it uses _auth instead of standard _authToken
       - name: Install Node.js ${{ inputs.node-version }} for JFrog Artifactory
-        # if: ${{ env.jfrog-artifactory-setup == 'true' }}
-        if: ${{ steps.has-secrets-check.outputs.has-secrets == 'true' }}
+        if: ${{ env.jfrog-artifactory-setup == 'true' }}
+        # if: ${{ steps.has-secrets-check.outputs.has-secrets == 'true' }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.node-version }}
@@ -89,8 +89,8 @@ jobs:
           cache-dependency-path: ./package-lock.json
 
       - name: Generate .npmrc for JFrog Artifactory
-        # if: ${{ env.jfrog-artifactory-setup == 'true' }}
-        if: ${{ steps.has-secrets-check.outputs.has-secrets == 'true' }}
+        if: ${{ env.jfrog-artifactory-setup == 'true' }}
+        # if: ${{ steps.has-secrets-check.outputs.has-secrets == 'true' }}
         shell: bash
         run: |
           SCOPE=${{ secrets.scope }}
