@@ -26,7 +26,7 @@ on:
       registry-url:
         required: false
       auth-token:
-        required: true
+        required: false
     # outputs: 
     #   has-scope:
     #     value: ${{ jobs.setup.outputs.has-scope }}
