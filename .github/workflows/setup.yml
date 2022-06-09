@@ -14,10 +14,10 @@ on:
         required: false
         type: string
         default: ubuntu-latest
-      jfrog-artifactory:
-        required: false
-        type: boolean
-        default: false
+      # jfrog-artifactory:
+      #   required: false
+      #   type: boolean
+      #   default: false
     secrets:
       github-token:
         required: false
@@ -60,14 +60,8 @@ jobs:
         if: ${{ env.SECRET_SCOPE != '' }} && ${{ env.SECRET_REGISTRY_URL != '' }}
         run: |
           echo "::set-output name=has-secrets::true"
-
-      - name: DEBUG NO SCOPE
-        if: ${{ steps.has-secrets-check.outputs.has-secrets != 'true' }}
-        run: echo 'NO SCOPE'
-      - name: DEBUG WITH SCOPE
-        if: ${{ steps.has-secrets-check.outputs.has-secrets == 'true' }}
-        run: echo 'WITH SCOPE'
       #END_PLM
+
       - name: Checkout repository ${{ inputs.branch-ref }}
         uses: actions/checkout@v3
         with:
@@ -89,8 +83,8 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.auth-token }}
       # /Standard setup
 
-      # JFrog Artifactory setup because it uses _auth instead of standard _authToken
-      - name: Install Node.js ${{ inputs.node-version }} for JFrog Artifactory
+      # Private Registry setup because it uses _auth instead of standard _authToken
+      - name: Install Node.js ${{ inputs.node-version }} for Private Registry
         # if: ${{ env.jfrog-artifactory-setup == 'true' }}
         if: ${{ steps.has-secrets-check.outputs.has-secrets == 'true' }}
         uses: actions/setup-node@v3
@@ -99,7 +93,7 @@ jobs:
           cache: "npm"
           cache-dependency-path: ./package-lock.json
 
-      - name: Generate .npmrc for JFrog Artifactory
+      - name: Generate .npmrc for Private Registry
         # if: ${{ env.jfrog-artifactory-setup == 'true' }}
         if: ${{ steps.has-secrets-check.outputs.has-secrets == 'true' }}
         shell: bash
@@ -109,7 +103,7 @@ jobs:
           AUTH=${{ secrets.auth-token }}
           echo "${SCOPE}:registry=${REGISTRY}" >> .npmrc
           echo "//${REGISTRY##*//}:_auth=${AUTH}" >> .npmrc
-      # /JFrog Artifactory
+      # /Private Registry
 
 
       - name: Install dependencies
