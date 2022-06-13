@@ -1,4 +1,4 @@
-name: Node Manager reusable workflows - Build
+name: Node reusable workflows - Build
 
 on:
   workflow_call:

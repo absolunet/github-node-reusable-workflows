@@ -1,4 +1,4 @@
-name: Node Manager reusable workflows - Setup
+name: Node reusable workflows - Setup
 
 on:
   workflow_call:

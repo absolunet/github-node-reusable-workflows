@@ -1,4 +1,4 @@
-name: Node Manager reusable workflows - Version bump
+name: Node reusable workflows - Version bump
 
 on:
   workflow_call:

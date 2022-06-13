@@ -1,4 +1,4 @@
-name: Node Manager reusable workflows - Publish
+name: Node reusable workflows - Publish
 
 on:
   workflow_call:

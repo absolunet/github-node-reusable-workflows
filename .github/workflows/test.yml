@@ -1,4 +1,4 @@
-name: Node Manager reusable workflows - Test
+name: Node reusable workflows - Test
 
 on:
   workflow_call:
