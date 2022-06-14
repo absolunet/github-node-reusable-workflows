@@ -1,0 +1,88 @@
+name: Node reusable workflows - Setup
+
+on:
+  workflow_call:
+    inputs:
+      branch-ref:
+        required: true
+        type: string
+      node-version:
+        required: false
+        type: string
+        default: 16
+      os:
+        required: false
+        type: string
+        default: ubuntu-latest
+      jfrog-artifactory:
+        required: false
+        type: boolean
+        default: false
+    secrets:
+      github-token:
+        required: false
+      scope:
+        required: false
+      registry-url:
+        required: false
+      auth-token:
+        required: false
+
+env:
+  create-npmrc: ${{ secrets.scope != '' || secrets.registry-url != '' || secrets.auth-token != '' }}
+  use-global-registry: ${{ secrets.scope == '' && secrets.registry-url != '' }}
+  use-scope-registry: ${{ secrets.scope != '' && secrets.registry-url != '' }}
+  use-standard-authentication: ${{ secrets.auth-token != '' && inputs.jfrog-artifactory == false }}
+  use-jfrog-artifactory-authentication: ${{ secrets.auth-token != '' && inputs.jfrog-artifactory == true }}
+
+jobs:
+  setup:
+    name: Setup for Node.js ${{ inputs.node-version }} [github-node-reusable-workflows/setup]
+    runs-on: ${{ inputs.os }}
+
+    steps:
+      - name: Checkout repository ${{ inputs.branch-ref }}
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.branch-ref }}
+          token: ${{ secrets.github-token || github.token }}
+
+      - name: Install Node.js ${{ inputs.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ inputs.node-version }}
+
+      # Generate .npmrc manually so it part of the cache and thus accessible to other reusable workflows
+      - name: Generate .npmrc
+        if: ${{ env.create-npmrc == 'true' }}
+        shell: bash
+        run: |
+          SCOPE=${{ secrets.scope }}
+          REGISTRY=$([[ "${{ secrets.registry-url }}" != "" ]] && echo "${{ secrets.registry-url }}" || echo "https://registry.npmjs.org/")
+          AUTH=${{ secrets.auth-token }}
+
+          if [ "${{ env.use-global-registry }}" == "true" ]; then
+            echo "registry=${REGISTRY}" >> .npmrc;
+          fi
+
+          if [ "${{ env.use-scope-registry }}" == "true" ]; then
+            echo "${SCOPE}:registry=${REGISTRY}" >> .npmrc;
+          fi
+
+          if [ "${{ env.use-standard-authentication }}" == "true" ]; then
+            echo "//${REGISTRY##*//}:_authToken=${AUTH}" >> .npmrc
+          fi
+
+          if [ "${{ env.use-jfrog-artifactory-authentication }}" == "true" ]; then
+            echo "//${REGISTRY##*//}:_auth=${AUTH}" >> .npmrc
+          fi
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create cache
+        uses: actions/cache@v3
+        id: checkout-repository-cache
+        with:
+          path: ./*
+          key: checkout-repository-cache-${{ github.sha }}

@@ -1,0 +1,29 @@
+name: Node reusable workflows - Build
+
+on:
+  workflow_call:
+
+jobs:
+  build:
+    name: Build project [github-node-reusable-workflows/build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch checkout-repository-cache
+        uses: actions/cache@v3
+        id: checkout-repository-cache
+        with:
+          path: ./*
+          key: checkout-repository-cache-${{ github.sha }}
+
+      - name: Build project via 'ci:build' npm script
+        shell: bash
+        run: npm run ci:build
+
+      - name: Create build-cache
+        uses: actions/cache@v3
+        id: build-cache
+        with:
+          path: |
+            ./*
+            !./node_modules
+          key: build-cache-${{ github.sha }}
