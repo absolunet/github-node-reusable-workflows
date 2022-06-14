@@ -1,4 +1,4 @@
-# GitHub Actions Reusable Workflows for Node.js projects
+# GitHub Reusable Workflows for Node.js projects
 > This module offers reusable workflows to ease javascript development.
 >
 > - Setup node (node version & auth)
