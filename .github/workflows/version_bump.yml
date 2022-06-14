@@ -36,6 +36,7 @@ jobs:
         with:
           release-version: ${{ steps.get-package-info.outputs.package_version }}
 
+      # We use `autocrlf` here to fix flow in case this reusable workflow is use after another one run-on windows.
       - name: Configure git
         shell: bash
         run: |
