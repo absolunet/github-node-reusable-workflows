@@ -40,6 +40,8 @@ jobs:
       - name: Configure git
         shell: bash
         run: |
+          git config user.name
+          git config user.email
           git config core.autocrlf false
           git config user.name "$(git --no-pager log --format=format:'%an' -n 1)"
           git config user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
@@ -53,4 +55,6 @@ jobs:
           git status
           git add -u
           git commit -m "[GitHub Action] Version bump to ${{ steps.get-package-info.outputs.package_version }}"
+          git config user.name
+          git config user.email
           git push origin ${{ github.head_ref }}
